@@ -1,0 +1,40 @@
+{
+  "name": "ngrok-notify",
+  "version": "0.1.0",
+  "description": "Create ngrok tunnel to expose localhost to the web and notify with ngrok URL",
+  "license": "MIT",
+  "repository": "thisdavej/ngrok-notify",
+  "author": {
+    "name": "Dave Johnson",
+    "email": "thisdavej@gmail.com",
+    "url": "thisdavej.com"
+  },
+  "bin": {
+    "ngrok-notify": "cli.js"
+  },
+  "engines": {
+    "node": ">=8.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ngrok",
+    "cli",
+    "app"
+  ],
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "js-yaml": "^3.11.0",
+    "meow": "^4.0.0",
+    "ngrok": "^3.0.1",
+    "nodemailer": "^4.6.4",
+    "update-notifier": "^2.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.7.0"
+  }
+}

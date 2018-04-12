@@ -1,0 +1,18 @@
+ngrok:
+  # Optional parameters
+  #subdomain: alex # reserved tunnel name https://alex.ngrok.io
+  #region: us # one of ngrok regions (us, eu, au, ap), defaults to us
+
+email:
+  recipients:
+  - thisdavej@gmail.com
+  #- 4155551212@tmomail.net
+
+  subject: ngrok URL for {proto} on port {port}
+
+  message: "The ngrok URL for {proto} on port {port} is: {url}"
+
+# Gmail credentials
+  user: thisdavejdemo@gmail.com
+  # This password is used if you don't set one in the .env file. The .env location is recommended.
+  password: mySecretPasswordHere
