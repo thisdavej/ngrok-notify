@@ -1,6 +1,6 @@
 {
   "name": "ngrok-notify",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Create ngrok tunnel to expose localhost to the web and notify with ngrok URL",
   "license": "MIT",
   "repository": "thisdavej/ngrok-notify",
