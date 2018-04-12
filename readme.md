@@ -4,8 +4,18 @@ Create ngrok tunnel to expose localhost to the web and notify by email with the 
 
 ## Install
 
+Linux, OS X, *BSD
+
 ```
-$ npm install -g ngrok-notify
+$ sudo npm install --unsafe-perm -g ngrok-notify
+```
+
+We need to install with the `--unsafe-perm` flag to enable the underlying `ngrok` package to run its postinstall script as root to download and save the ngrok binary in the global `node_modules` folder.  This extra flag is not necessary for Windows installations.
+
+Windows
+
+```
+C:\> npm install -g ngrok-notify
 ```
 
 ## Configure
