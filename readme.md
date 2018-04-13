@@ -75,16 +75,20 @@ $ ngrok-notify --help
   Notes
     Email messages are sent using the settings in the config.yml file and the
     Gmail password stored in the .env file.
-  
+
   Examples
     Create ngrok tunnel to expose localhost web server running on port 8080.
     Email is sent with the ngrok URL since "--noemail" is not included.
     $ ngrok-notify http 8080
-    
+
     Create ngrok tunnel to expose localhost web server running on port 8080,
     but don't send email.
     $ ngrok-notify http 8080 -n
 ```
+
+## Alternatives
+
+This package leverages the excellent [ngrok](https://www.npmjs.com/package/ngrok) package and provides notification capabilities.  If you don't have a need for the notify feature, you may want to consider using the [ngrok](https://www.npmjs.com/package/ngrok) package directly instead.
 
 ## License
 
