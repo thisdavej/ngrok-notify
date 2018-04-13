@@ -4,7 +4,7 @@ Create ngrok tunnel to expose localhost to the web and notify by email with the 
 
 ## Install
 
-Linux, OS X, *BSD
+Linux/macOS
 
 ```
 $ sudo npm install --unsafe-perm -g ngrok-notify
