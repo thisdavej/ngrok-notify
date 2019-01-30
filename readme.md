@@ -2,7 +2,7 @@
 
 Create ngrok tunnel to expose localhost to the web and notify by email with the ngrok URL
 
-See [my tututorial here](https://thisdavej.com/how-to-host-a-raspberry-pi-web-server-on-the-internet-with-ngrok/) for a complete walkthrough including the steps below.
+See my tutorial [here](https://thisdavej.com/how-to-host-a-raspberry-pi-web-server-on-the-internet-with-ngrok/) for a complete walkthrough including the steps below.
 
 ## Install
 
