@@ -8,6 +8,8 @@ const ngrok = require('ngrok');
 const init = require('./lib/init');
 const interpolate = require('./lib/interpolate');
 const sendEmail = require('./lib/send-email');
+const sendWebhook = require('./lib/send-webhook');
+
 const updateNotifier = require('update-notifier');
 require('dotenv').config();
 const pkg = require('./package.json');
@@ -23,7 +25,8 @@ const cli = meow(
     init            Copy starter config files into directory for customizing
 
   Optional arguments:
-    -n, --noemail   Do not send an email providing the URL of the ngrok tunnel
+    -e, --email     Send an email providing the URL of the ngrok tunnel
+    -w, --webhook   Call a webhook providing the URL of the ngrok tunnel as POST params
     -h, --help      Show help
     -v, --version   Display version information
     -f, --force     Overwrite config files in directory if they exist.
@@ -31,21 +34,25 @@ const cli = meow(
   Notes
     Email messages are sent using the settings in the config.yml file and the
     Gmail password stored in the .env file.
-  
+
   Examples
     Create ngrok tunnel to expose localhost web server running on port 8080.
     Email is sent with the ngrok URL since "--noemail" is not included.
     $ ngrok-notify http 8080
-    
+
     Create ngrok tunnel to expose localhost web server running on port 8080,
     but don't send email.
     $ ngrok-notify http 8080 -n
 `,
   {
     flags: {
-      noemail: {
+      email: {
         type: 'boolean',
-        alias: 'n'
+        alias: 'e'
+      },
+      webhook: {
+        type: 'boolean',
+        alias: 'w'
       },
       force: {
         type: 'boolean',
@@ -89,7 +96,7 @@ if (cli.input.length < 2) {
   const [proto, strPort] = cli.input;
 
   opts.proto = proto;
-  
+
   const isIntegerInRange = (i, min, max) =>
     Number.isInteger(i) && i >= min && i <= max;
   const PORT_MIN = 0;
@@ -116,29 +123,54 @@ if (authtoken) opts.authtoken = authtoken;
 const emailOpts = config.email;
 
 (async () => {
+  console.log("Opening connection with ngrok...");
   const url = await ngrok.connect(opts);
+
+  console.log(`Connected to ngrok: ${url} `);
 
   // Add url so it can be interpolated from the message text containing "{url}"
   opts.url = url;
 
-  // Get Gmail password if set in .env file.
-  if (process.env.GMAIL_PASSWORD)
-    emailOpts.password = process.env.GMAIL_PASSWORD;
 
-  // substitute values like {proto} with their configuration values
-  // patch in property name of port since it's a more technically correct and known term.
-  opts.port = opts.addr;
-  const subject = interpolate(emailOpts.subject, opts);
-  const message = interpolate(emailOpts.message, opts);
 
-  const emailEnabled = !cli.flags.n;
+  const emailEnabled = cli.flags.email;
 
   let emailTail = '';
   if (emailEnabled) {
+    console.log("Sending Email...");
+    // Get Gmail password if set in .env file.
+    if (process.env.GMAIL_PASSWORD)
+      emailOpts.password = process.env.GMAIL_PASSWORD;
+
+    // substitute values like {proto} with their configuration values
+    // patch in property name of port since it's a more technically correct and known term.
+    opts.port = opts.addr;
+    const subject = interpolate(emailOpts.subject, opts);
+    const message = interpolate(emailOpts.message, opts);
+
     sendEmail(emailOpts, subject, message);
     emailTail = ' (email sent)';
+
+    console.log(`${message}${emailTail}`);
   }
-  console.log(`${message}${emailTail}`);
+
+  const webhookOpts = config.webhook;
+  const webhookEnabled = cli.flags.webhook;
+
+  if (webhookEnabled) {
+    console.log("Calling Webhook...");
+    const webhook_url = webhookOpts.url
+    const webhook_method = webhookOpts.method === "GET" ? "GET" : "POST";
+
+    try {
+      const response  = await sendWebhook(opts, webhook_url, webhook_method);
+      console.log(`Webhook triggered at ${webhook_url} with method ${webhook_method}`);
+    } catch (error) {
+      console.error(`Error calling webhook at ${webhook_url} with method ${webhook_method}`);
+      console.error(error);
+    }
+
+  }
 
   updateNotifier({pkg}).notify();
 })();
