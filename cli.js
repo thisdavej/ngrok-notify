@@ -37,12 +37,14 @@ const cli = meow(
 
   Examples
     Create ngrok tunnel to expose localhost web server running on port 8080.
-    Email is sent with the ngrok URL since "--noemail" is not included.
-    $ ngrok-notify http 8080
+    Email is sent with the ngrok URL since "-e" is included.
+    $ ngrok-notify http 8080 -e
 
-    Create ngrok tunnel to expose localhost web server running on port 8080,
-    but don't send email.
-    $ ngrok-notify http 8080 -n
+    Call a webhook instead of sending an email.
+    $ ngrok-notify http 8080 -w
+
+    You can send an email and call webhook with one command specifying both options.
+    $ ngrok-notify http 8080 -e -w
 `,
   {
     flags: {

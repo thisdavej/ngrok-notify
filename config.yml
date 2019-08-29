@@ -22,4 +22,4 @@ webhook:
   method: POST
 
   # URL for the webhook (Please include protocol like http:// or https://)
-  url: https://example.com/myngrockhook
+  url: https://example.com/myngrokhook
