@@ -24,7 +24,7 @@
     "app"
   ],
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "js-yaml": "^3.13.1",
     "meow": "^6.1.0",
