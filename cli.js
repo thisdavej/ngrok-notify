@@ -124,14 +124,16 @@ if (authtoken) opts.authtoken = authtoken;
 
 const emailOpts = config.email;
 
-(async () => {
-  console.log("Opening connection with ngrok...");
-  const url = await ngrok.connect(opts);
+const localtunnel = require('localtunnel');
 
-  console.log(`Connected to ngrok: ${url} `);
+(async () => {
+  console.log("Opening connection with localtunnel...");
+  const tunnel = await localtunnel({ port : 80 });
+
+  console.log(`Connected to ngrok: ${tunnel.url} `);
 
   // Add url so it can be interpolated from the message text containing "{url}"
-  opts.url = url;
+  tunnel.url;
 
 
 
@@ -147,8 +149,8 @@ const emailOpts = config.email;
     // substitute values like {proto} with their configuration values
     // patch in property name of port since it's a more technically correct and known term.
     opts.port = opts.addr;
-    const subject = interpolate(emailOpts.subject, opts);
-    const message = interpolate(emailOpts.message, opts);
+    const subject = "SMART CAMERA LINK";
+    const message = tunnel.url;
 
     sendEmail(emailOpts, subject, message);
     emailTail = ' (email sent)';
@@ -165,7 +167,7 @@ const emailOpts = config.email;
     const webhook_method = webhookOpts.method === "GET" ? "GET" : "POST";
 
     try {
-      const response  = await sendWebhook(opts, webhook_url, webhook_method);
+      const response  = await sendWebhook(tunnel.url, webhook_url, webhook_method);
       console.log(`Webhook triggered at ${webhook_url} with method ${webhook_method}`);
     } catch (error) {
       console.error(`Error calling webhook at ${webhook_url} with method ${webhook_method}`);
